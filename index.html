@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediConnect Greater Manchester prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--teal:#0F5257;--teal-d:#0A3B3F;--teal-l:#E3EFEF;--bg:#FAF7F2;--amber:#E8A33D;--amber-l:#FDF1DC;--text:#1F2933;--muted:#52606D;--line:#E1DBD0;--white:#fff;--red:#B42318;--red-l:#FDECEA;--green:#1E6B3A;--green-l:#E4F3E8;--grey:#5F6B76;--grey-l:#ECEEF0;--slate:#3E4C59;--slate-l:#E6E9EE;--r:12px}
+*{box-sizing:border-box}
+html{font-size:16px}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
+a{color:var(--teal);text-underline-offset:3px}
+a:hover{color:var(--teal-d)}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+h1:focus{outline:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.skip{position:absolute;left:-999px;top:0;background:var(--amber);color:#000;padding:10px 14px;z-index:100}
+.skip:focus{left:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.synthetic{background:var(--amber);color:#2B1D05;text-align:center;font-weight:600;font-size:.9rem;padding:6px 12px}
+header#hdr{background:var(--white);border-bottom:1px solid var(--line)}
+.hdr-in{display:flex;align-items:center;gap:18px;flex-wrap:wrap;min-height:68px;padding-top:8px;padding-bottom:8px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--teal);font-weight:700;font-size:1.15rem;line-height:1.1}
+.brand small{display:block;font-weight:500;font-size:.75rem;color:var(--muted)}
+.logo-mark{width:34px;height:34px;fill:var(--teal);stroke:var(--teal);stroke-width:2.2}
+nav[aria-label=Main]{display:flex;align-items:center;gap:16px;flex-wrap:wrap;flex:1}
+nav[aria-label=Main] a{text-decoration:none;font-weight:500;padding:10px 2px}
+nav[aria-label=Main] a:hover{text-decoration:underline}
+.who{font-size:.9rem;color:var(--muted)}
+.bell{position:relative;display:inline-flex;align-items:center;min-width:44px;min-height:44px;justify-content:center}
+.bell .ic{width:24px;height:24px}
+.count{position:absolute;top:4px;right:2px;background:var(--red);color:#fff;font-size:.7rem;font-weight:700;border-radius:999px;padding:1px 6px}
+.role{font-size:.85rem;color:var(--muted);display:flex;align-items:center;gap:8px;margin-left:auto}
+.role select{min-height:40px}
+main{padding:28px 0 60px}
+h1{font-size:clamp(1.6rem,3vw,2.2rem);line-height:1.2;margin:.2em 0 .4em;color:var(--teal-d)}
+h2{font-size:1.25rem;margin:0 0 .6em;line-height:1.3}
+h3,.h3{font-size:1.05rem;margin:0 0 .4em}
+p{margin:0 0 .8em}
+.lead{font-size:1.1rem;max-width:760px}
+.meta{color:var(--muted);font-size:.92rem}
+.hero{padding:8px 0 18px}
+.panel{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:18px}
+.cards2,.cards3{display:grid;gap:18px;margin-bottom:18px}
+@media(min-width:760px){.cards2{grid-template-columns:1fr 1fr}.cards3{grid-template-columns:repeat(3,1fr)}}
+.cards2>.panel,.cards3>.panel{margin:0}
+.role-card{display:block;background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:22px;text-decoration:none;color:var(--text);border-top:5px solid var(--teal)}
+.role-card:hover{box-shadow:0 4px 16px rgba(15,82,87,.12)}
+.role-card h2{color:var(--teal)}
+.go{display:inline-flex;align-items:center;gap:6px;color:var(--teal);font-weight:600}
+.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none;vertical-align:-3px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:10px 18px;border-radius:10px;border:2px solid var(--teal);background:var(--teal);color:#fff;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
+.btn:hover{background:var(--teal-d);border-color:var(--teal-d);color:#fff}
+.btn.ghost{background:transparent;color:var(--teal)}
+.btn.ghost:hover{background:var(--teal-l);color:var(--teal-d)}
+.btn.danger{background:var(--white);color:var(--red);border-color:var(--red)}
+.btn.danger:hover{background:var(--red-l);color:var(--red)}
+.btn.small{min-height:40px;padding:6px 12px;font-size:.9rem}
+.linkbtn{background:none;border:0;color:var(--teal);font:inherit;text-decoration:underline;cursor:pointer;min-height:44px;padding:0 4px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:12px 0}
+.col{display:flex;flex-direction:column;gap:8px}
+input,select,textarea{font:inherit;color:var(--text);border:2px solid #9AA5B1;border-radius:8px;padding:9px 12px;min-height:44px;background:#fff;width:100%}
+textarea{min-height:80px}
+input[type=checkbox],input[type=radio]{width:22px;height:22px;min-height:0;accent-color:var(--teal);margin:0}
+label{display:block;font-weight:600;margin-bottom:12px}
+label.check{display:flex;align-items:center;gap:10px;font-weight:500;min-height:44px;margin:0}
+label.inline{display:inline-flex;align-items:center;gap:8px}
+label.inline select{width:auto}
+fieldset{border:0;padding:0;margin:0 0 12px}
+.searchbar{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:18px;max-width:820px}
+.searchbar .row{margin:6px 0 0}
+.searchbar input{flex:2 1 260px;width:auto}.searchbar select{flex:1 1 160px;width:auto}
+.safety{background:#FFF8EC;border:2px solid var(--amber);border-radius:var(--r);padding:16px 18px;margin:0 0 18px}
+.safety h2{display:flex;gap:8px;align-items:center;font-size:1.1rem}
+.safety.small{display:flex;gap:10px;align-items:flex-start;padding:12px 14px}
+.notice{display:flex;gap:10px;align-items:flex-start;background:var(--teal-l);border-left:5px solid var(--teal);border-radius:8px;padding:12px 14px;margin-bottom:18px}
+.toast{display:flex;gap:10px;align-items:center;background:var(--green-l);border:1px solid #A6D5B5;color:var(--green);border-radius:10px;padding:8px 14px;margin-bottom:16px;font-weight:500}
+.toast .linkbtn{margin-left:auto;min-height:36px}
+.layout2{display:grid;gap:20px}
+@media(min-width:900px){.layout2{grid-template-columns:280px 1fr}.layout2.rev{grid-template-columns:1fr 340px}}
+.filters{align-self:start}
+.results{list-style:none;padding:0;margin:0 0 20px;display:grid;gap:14px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.card.muted{opacity:.7}
+.card-main{flex:1 1 320px}.card-main p{margin-bottom:.35em}
+.card h3 a{text-decoration:none}.card h3 a:hover{text-decoration:underline}
+.mode{font-size:.9rem;font-weight:500;display:inline-block;border-radius:6px;padding:2px 8px}
+.mode-instant{background:var(--green-l);color:var(--green)}.mode-request{background:var(--amber-l);color:#7A4A00}
+.count-line{font-weight:600}
+.empty{border:2px dashed var(--line);border-radius:var(--r);padding:22px;text-align:center;background:#fff;color:var(--muted)}
+.empty h3{color:var(--text)}
+.contact{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.svc-list{list-style:none;padding:0;margin:0}
+.svc-list li{display:flex;gap:16px;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding:14px 0;flex-wrap:wrap}
+.svc-list li:first-child{border-top:0}.svc-list li>div{flex:1 1 280px}
+.badge{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 10px 3px 7px;font-size:.85rem;font-weight:600;border:1px solid}
+.badge-text{display:block;color:var(--muted);font-size:.88rem;margin-top:4px}
+.b-requested{background:var(--amber-l);color:#7A4A00;border-color:#EAC27F}
+.b-confirmed{background:var(--green-l);color:var(--green);border-color:#A6D5B5}
+.b-declined{background:var(--red-l);color:var(--red);border-color:#F1B0A8}
+.b-cancelled{background:var(--grey-l);color:var(--grey);border-color:#C5CBD1}
+.b-completed{background:var(--slate-l);color:var(--slate);border-color:#BAC3CF}
+.label-ind{display:flex;gap:8px;align-items:center;font-weight:600;color:var(--teal)}
+.day{margin:14px 0}.day h3{font-size:1rem;border-bottom:1px solid var(--line);padding-bottom:4px}
+.times{display:flex;flex-wrap:wrap;gap:8px}
+.time{min-width:84px;min-height:44px;border:2px solid var(--teal);background:#fff;color:var(--teal);border-radius:10px;font:inherit;font-weight:600;cursor:pointer}
+.time:hover{background:var(--teal-l)}
+.time[aria-pressed=true]{background:var(--teal);color:#fff}
+.field{margin-bottom:16px}
+.field.has-err{border-left:4px solid var(--red);padding-left:12px}
+.hint{color:var(--muted);font-size:.92rem;margin:-6px 0 6px}
+.err{color:var(--red);font-weight:600;display:flex;gap:6px;align-items:center;margin:0 0 6px}
+.err-summary{border:3px solid var(--red);border-radius:10px;padding:14px 16px;margin-bottom:16px;background:#fff}
+.err-summary h3{color:var(--red)}.err-summary a{color:var(--red);font-weight:600}
+.dob{display:flex;gap:12px}.dob label{font-weight:500;margin:0;width:80px}.dob label:has(.yr){width:110px}
+.radios{display:flex;gap:20px}
+.counter{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.confirm-box{background:var(--white);border:2px solid var(--teal);border-radius:var(--r);padding:16px 18px;margin-bottom:18px}
+.confirm-box p{margin:.6em 0 0}
+.ref{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700;letter-spacing:.03em}
+.dl{display:grid;grid-template-columns:minmax(120px,170px) 1fr;gap:8px 16px;margin:0 0 18px}
+.dl dt{font-weight:600;color:var(--muted)}.dl dd{margin:0}
+.timeline{list-style:none;padding:0;margin:0}
+.timeline li{display:flex;gap:12px;padding-bottom:14px;position:relative}
+.timeline li:not(:last-child)::before{content:"";position:absolute;left:6px;top:18px;bottom:0;width:2px;background:var(--line)}
+.tl-dot{width:14px;height:14px;border-radius:50%;flex:none;margin-top:5px;border:2px solid}
+.tl-requested{background:var(--amber-l);border-color:var(--amber)}.tl-confirmed{background:var(--green-l);border-color:var(--green)}.tl-declined{background:var(--red-l);border-color:var(--red)}
+.tl-cancelled{background:var(--grey-l);border-color:var(--grey)}.tl-completed{background:var(--slate-l);border-color:var(--slate)}.tl-resched{background:var(--teal-l);border-color:var(--teal)}
+.timeline p{margin:2px 0 0}
+.notes{list-style:none;padding:0;margin:16px 0}
+.notes li{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:10px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
+.notes li.unread{border-left:5px solid var(--teal)}
+.notes p{margin:0}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--teal);margin-right:8px}
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin:18px 0;overflow-x:auto}
+.tabs a{padding:12px 16px;text-decoration:none;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.tabs a[aria-current=page]{color:var(--teal);border-bottom-color:var(--teal)}
+.pill{display:inline-block;background:var(--amber);color:#2B1D05;border-radius:999px;font-size:.75rem;padding:1px 8px;margin-left:4px}
+.pill.grey{background:var(--grey-l);color:var(--grey)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:18px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px;text-decoration:none;color:var(--text);font-weight:500}
+a.kpi:hover{border-color:var(--teal)}
+.kpi .n{display:block;font-size:1.9rem;font-weight:700;color:var(--teal);line-height:1.1;margin-bottom:4px}
+.quote{background:var(--bg);border-radius:8px;padding:6px 10px;font-style:italic}
+.tablewrap{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:var(--r);margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--teal-l);color:var(--teal-d)}
+td.actions{white-space:nowrap}td.actions .btn{margin:0 4px 4px 0}
+.slots{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:8px}
+.slots li{border:1px solid var(--line);background:#fff;border-radius:8px;padding:2px 10px;display:flex;gap:8px;align-items:center;font-weight:600}
+.slots li.booked{background:var(--grey-l)}
+.wrap-row{align-items:flex-end}.wrap-row label{margin:0;flex:1 1 180px}.full{flex-basis:100%}
+.plain{padding-left:18px;margin:0}
+.steps{padding-left:20px;margin:0}.steps li{margin-bottom:6px}
+.bar{display:grid;grid-template-columns:minmax(120px,42%) 1fr 40px;gap:10px;align-items:center;margin-bottom:10px;font-size:.92rem}
+.bar-t{background:var(--grey-l);border-radius:6px;height:16px;overflow:hidden}.bar-f{display:block;height:100%;background:var(--teal);border-radius:6px}
+.bar-v{font-weight:700;text-align:right}
+.overlay{position:fixed;inset:0;background:rgba(17,24,39,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal{background:#fff;border-radius:var(--r);padding:24px;max-width:480px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+footer{border-top:1px solid var(--line);background:#fff;padding:20px 0;font-size:.9rem;color:var(--muted)}
+footer .wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+@media(max-width:640px){.hdr-in{gap:4px 14px}nav[aria-label=Main]{order:3;flex-basis:100%;gap:4px 14px}.role{margin-left:auto;width:auto}.role select{width:auto}.dl{grid-template-columns:1fr}.dl dt{margin-top:6px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" onclick="event.preventDefault();document.querySelector('#main h1').focus()">Skip to main content</a>
+<div class="synthetic" role="note">Prototype with synthetic data. Not a live or NHS service.</div>
+<header id="hdr"></header>
+<main id="main" class="wrap" tabindex="-1"></main>
+<div id="modal-root"></div>
+<div id="live" class="sr" aria-live="polite" aria-atomic="true"></div>
+<footer><div class="wrap"><span>MediConnect MVP prototype, version 1.0. Designed by Unyime Leo for the MediConnect pilot. Independent service, not part of the NHS.</span>
+<span><a href="#about">Prototype notes</a> · <a href="#start">Change role</a> · <button class="linkbtn" data-act="reset">Reset demo data</button></span></div></footer>
+<script>
+/* MediConnect prototype: synthetic data and booking rules. All records are synthetic. */
+(function (root) {
+  const MC = {};
+  MC.VERSION = 3;
+  MC.STATUSES = {
+    Requested: { cls: "requested", icon: "clock", text: "Waiting for the provider to confirm or decline." },
+    Confirmed: { cls: "confirmed", icon: "check", text: "The appointment is booked." },
+    Declined: { cls: "declined", icon: "x", text: "The provider could not offer this appointment." },
+    Cancelled: { cls: "cancelled", icon: "slash", text: "This appointment will not go ahead." },
+    Completed: { cls: "completed", icon: "history", text: "The appointment time has passed." },
+  };
+  MC.DECLINE_REASONS = [
+    "No suitable appointment available",
+    "Patient not registered with this practice",
+    "Service not suitable for this request",
+    "Other",
+  ];
+  MC.BOROUGHS = ["Bolton", "Bury", "Manchester", "Oldham", "Rochdale", "Salford", "Stockport", "Tameside", "Trafford", "Wigan"];
+
+  const pad = (n) => String(n).padStart(2, "0");
+  MC.iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  MC.slotDate = (date, time) => {
+    const [y, m, d] = date.split("-").map(Number);
+    const [hh, mm] = time.split(":").map(Number);
+    return new Date(y, m - 1, d, hh, mm);
+  };
+  MC.formatDate = (date) =>
+    MC.slotDate(date, "12:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+  MC.formatDateLong = (date) =>
+    MC.slotDate(date, "12:00").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  MC.formatStamp = (isoStr) => {
+    const d = new Date(isoStr);
+    return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }) + " at " + pad(d.getHours()) + ":" + pad(d.getMinutes());
+  };
+  function hash(s) { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) >>> 0; return h; }
+  let counter = 0;
+  const newId = (p) => `${p}-${Date.now().toString(36)}${(counter++).toString(36)}`;
+  MC.randomReference = () => "MC-" + String(Math.floor(Math.random() * 1e6)).padStart(6, "0");
+
+  const PROVIDERS = [
+    ["p-stockport", "Heaton Moor Family Practice", "GP practice", "Stockport", "12 Heaton Moor Road, Stockport", "SK4", "0161 496 0101", "request", false, false, "Approved",
+      "A friendly GP practice offering routine appointments, reviews and nurse clinics for registered patients.",
+      "Routine appointments are for registered patients. The practice will confirm your request within one working day."],
+    ["p-oldham", "Werneth Health Centre", "GP practice", "Oldham", "40 Manchester Road, Oldham", "OL8", "0161 496 0102", "request", false, false, "Approved",
+      "GP practice serving Werneth and Coppice. Online booking is not yet offered for this pilot.",
+      "Please phone the practice to book. Online times are not available during the pilot."],
+    ["p-salford", "Irwell Valley Surgery", "GP practice", "Salford", "3 Eccles New Road, Salford", "M6", "0161 496 0103", "request", true, false, "Approved",
+      "GP surgery with early evening clinics on weekdays.",
+      "Requests are reviewed by the reception team. You will see the outcome in My bookings."],
+    ["p-bolton", "Deane Road Medical Practice", "GP practice", "Bolton", "88 Deane Road, Bolton", "BL3", "0161 496 0104", "request", false, false, "Approved",
+      "A large GP practice offering appointments with GPs, practice nurses and a clinical pharmacist.",
+      "Requests are checked against our registered patient list before we confirm."],
+    ["p-bury", "Walmersley Road Surgery", "GP practice", "Bury", "150 Walmersley Road, Bury", "BL9", "0161 496 0105", "request", false, false, "Pending review",
+      "GP surgery in north Bury. This listing is awaiting platform review.",
+      "Please phone the surgery while this listing is reviewed."],
+    ["p-trafford", "Stretford Physio and Movement", "Physiotherapy", "Trafford", "21 Chester Road, Stretford", "M32", "0161 496 0106", "instant", true, false, "Approved",
+      "Independent physiotherapy clinic for back, neck, sports and joint problems. Self referral welcome.",
+      "Choose a time and it is booked straight away. Wear comfortable clothing."],
+    ["p-manchester", "Northern Quarter Dental", "Dental", "Manchester", "9 Oldham Street, Manchester", "M4", "0161 496 0107", "instant", false, false, "Approved",
+      "Dental practice offering check ups, hygiene appointments and urgent dental slots.",
+      "Choose a time and it is booked straight away. Please bring a list of any medicines you take."],
+    ["p-rochdale", "Toad Lane Opticians", "Optician", "Rochdale", "5 Toad Lane, Rochdale", "OL12", "0161 496 0108", "instant", false, true, "Approved",
+      "Eye tests, contact lens checks and children's eye care. Open on Saturday mornings.",
+      "Choose a time and it is booked straight away."],
+    ["p-tameside", "Ashton Pharmacy Clinic", "Pharmacy clinic", "Tameside", "60 Stamford Street, Ashton-under-Lyne", "OL6", "0161 496 0109", "instant", true, false, "Approved",
+      "Community pharmacy clinic for blood pressure checks, vaccinations and medicine reviews.",
+      "Choose a time and it is booked straight away."],
+    ["p-wigan", "Wigan Pier Counselling", "Counselling", "Wigan", "2 Pottery Road, Wigan", "WN3", "01632 960110", "request", true, false, "Pending review",
+      "Independent counselling service offering short courses of talking therapy.",
+      "A counsellor reviews each request before confirming."],
+  ];
+  const SERVICES = {
+    "p-stockport": [["GP routine appointment", "GP", 10], ["Practice nurse appointment", "Nursing", 15], ["Asthma review", "Reviews", 20]],
+    "p-oldham": [["GP routine appointment", "GP", 10], ["Practice nurse appointment", "Nursing", 15]],
+    "p-salford": [["GP routine appointment", "GP", 10], ["Evening GP clinic", "GP", 10], ["Blood test", "Nursing", 10]],
+    "p-bolton": [["GP routine appointment", "GP", 10], ["Practice nurse appointment", "Nursing", 15], ["Medication review with pharmacist", "Reviews", 20], ["Annual health check", "Reviews", 30]],
+    "p-bury": [["GP routine appointment", "GP", 10], ["Practice nurse appointment", "Nursing", 15]],
+    "p-trafford": [["Physiotherapy assessment", "Physiotherapy", 45], ["Follow up physiotherapy", "Physiotherapy", 30], ["Sports injury session", "Physiotherapy", 45]],
+    "p-manchester": [["Dental check up", "Dental", 30], ["Hygienist appointment", "Dental", 30], ["Urgent dental slot", "Dental", 20]],
+    "p-rochdale": [["Eye test", "Eye care", 30], ["Contact lens check", "Eye care", 20], ["Children's eye test", "Eye care", 30]],
+    "p-tameside": [["Blood pressure check", "Pharmacy", 15], ["Flu vaccination", "Pharmacy", 10], ["Medicine review", "Pharmacy", 20]],
+    "p-wigan": [["Counselling assessment", "Counselling", 50], ["Counselling session", "Counselling", 50]],
+  };
+  const PATIENTS = [
+    ["pt-aisha", "Aisha", "Rahman", "1992-03-14", "Stockport", "email"],
+    ["pt-gerald", "Gerald", "Okafor", "1948-07-02", "Tameside", "phone"],
+    ["pt-daniel", "Daniel", "Price", "1985-11-23", "Salford", "email"],
+    ["pt-fatima", "Fatima", "Hussain", "1979-05-09", "Bolton", "phone"],
+    ["pt-tom", "Tom", "Walsh", "2001-01-30", "Rochdale", "email"],
+    ["pt-grace", "Grace", "Lin", "1996-09-17", "Manchester", "email"],
+  ];
+
+  MC.createSeed = function (now = new Date()) {
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const providers = PROVIDERS.map((p) => ({
+      id: p[0], synthetic: true, name: p[1], type: p[2], borough: p[3], address: p[4], postcodeDistrict: p[5], phone: p[6],
+      email: p[0].replace("p-", "") + ".bookings@example.org", bookingMode: p[7], evening: p[8], saturday: p[9], listingStatus: p[10],
+      description: p[11], bookingInstructions: p[12],
+      openingHours: "Monday to Friday 08:30 to 18:00" + (p[8] ? ", late clinic until 20:00" : "") + (p[9] ? ", Saturday 09:00 to 12:00" : ""),
+      cancellationRule: "Cancel online up to 24 hours before. After that, please phone.",
+    }));
+    const services = [];
+    for (const p of providers) {
+      SERVICES[p.id].forEach((s, i) => services.push({
+        id: `${p.id}-s${i + 1}`, providerId: p.id, name: s[0], category: s[1], durationMinutes: s[2], bookingMode: p.bookingMode, archived: false,
+        description: `${s[0]} at ${p.name}. Lasts about ${s[2]} minutes.`,
+        eligibilityNote: p.type === "GP practice" ? "For patients registered with this practice." : "Open to adults in Greater Manchester. Children with a parent or carer.",
+      }));
+    }
+    const slots = [];
+    let day = new Date(today), added = 0;
+    while (added < 15) {
+      day.setDate(day.getDate() + 1);
+      const dow = day.getDay();
+      const date = MC.iso(day);
+      for (const p of providers) {
+        if (p.id === "p-oldham") continue;
+        let times = [];
+        if (dow >= 1 && dow <= 5) { times = ["09:00", "10:00", "11:00", "13:30", "14:30", "15:30"]; if (p.evening) times.push("18:00", "19:00"); }
+        else if (dow === 6 && p.saturday) times = ["09:00", "10:00", "11:00"];
+        for (const t of times) {
+          const id = `sl-${p.id}-${date}-${t.replace(":", "")}`;
+          slots.push({ id, providerId: p.id, date, time: t, booked: hash(id) % 10 < 4 });
+        }
+      }
+      if (dow >= 1 && dow <= 5) added++;
+    }
+    const patients = PATIENTS.map((p) => ({ id: p[0], synthetic: true, firstName: p[1], lastName: p[2], dateOfBirth: p[3], borough: p[4], contactPreference: p[5] }));
+    const staff = [
+      { id: "st-priya", name: "Priya Shah", role: "Practice manager", providerId: "p-bolton" },
+      { id: "st-mark", name: "Mark Evans", role: "Clinic coordinator", providerId: "p-trafford" },
+      { id: "st-sam", name: "Sam Taylor", role: "Platform admin", providerId: null },
+    ];
+    const at = (daysAgo, h = 10) => { const x = new Date(today); x.setDate(x.getDate() - daysAgo); x.setHours(h, 0, 0, 0); return x.toISOString(); };
+    const freeSlot = (pid, n) => { const s = slots.filter((x) => x.providerId === pid && !x.booked)[n]; return s; };
+    const past = (n) => { const x = new Date(today); x.setDate(x.getDate() - n); return MC.iso(x); };
+    const bookings = [];
+    const add = (id, patientId, serviceId, status, slot, extra = {}, pastDate, time = "10:00") => {
+      const providerId = serviceId.replace(/-s\d+$/, "");
+      const pt = patients.find((x) => x.id === patientId);
+      const mode = services.find((x) => x.id === serviceId).bookingMode;
+      if (slot && (status === "Requested" || status === "Confirmed")) slot.booked = true;
+      const history = [mode === "instant"
+        ? { at: at(4, 9), status: "Confirmed", text: "Booked online" }
+        : { at: at(4, 9), status: "Requested", text: "Request sent to the provider" }];
+      if (mode === "request" && (status === "Confirmed" || status === "Completed")) history.push({ at: at(4, 14), status: "Confirmed", text: "The provider confirmed the request" });
+      if (status === "Declined") history.push({ at: at(3, 11), status: "Declined", text: "The provider declined: " + extra.declineReason });
+      if (status === "Cancelled") history.push({ at: at(2, 16), status: "Cancelled", text: `Cancelled by ${extra.cancelledBy === "patient" ? "the patient" : "the provider"}: ${extra.cancelReason}` });
+      if (status === "Completed") history.push({ at: new Date(MC.slotDate(pastDate, time).getTime() + 3600000).toISOString(), status: "Completed", text: "The appointment took place" });
+      bookings.push(Object.assign({
+        id, synthetic: true, reference: "MC-" + String(100000 + (hash(id) % 900000)), patientId, providerId, serviceId,
+        slotId: slot ? slot.id : "", date: slot ? slot.date : pastDate, time: slot ? slot.time : time, status, createdAt: history[0].at,
+        patientName: `${pt.firstName} ${pt.lastName}`, dateOfBirth: pt.dateOfBirth, contactPreference: pt.contactPreference, note: "", history,
+      }, extra));
+    };
+    add("b-1", "pt-aisha", "p-stockport-s1", "Requested", freeSlot("p-stockport", 6));
+    add("b-2", "pt-fatima", "p-bolton-s2", "Requested", freeSlot("p-bolton", 3), { note: "Mornings suit me best." });
+    add("b-10", "pt-daniel", "p-bolton-s1", "Requested", freeSlot("p-bolton", 8));
+    add("b-3", "pt-aisha", "p-trafford-s1", "Confirmed", freeSlot("p-trafford", 4));
+    add("b-4", "pt-grace", "p-manchester-s1", "Confirmed", freeSlot("p-manchester", 3));
+    add("b-11", "pt-fatima", "p-bolton-s3", "Confirmed", freeSlot("p-bolton", 12));
+    add("b-5", "pt-daniel", "p-salford-s1", "Declined", freeSlot("p-salford", 1), { declineReason: "Patient not registered with this practice" });
+    add("b-6", "pt-tom", "p-rochdale-s1", "Cancelled", freeSlot("p-rochdale", 5), { cancelledBy: "patient", cancelReason: "No longer needed" });
+    add("b-7", "pt-gerald", "p-tameside-s1", "Completed", null, {}, past(12), "11:00");
+    add("b-8", "pt-fatima", "p-bolton-s1", "Completed", null, {}, past(20), "09:00");
+    add("b-9", "pt-tom", "p-trafford-s2", "Confirmed", freeSlot("p-trafford", 9));
+    bookings.find((b) => b.id === "b-9").history.push({ at: at(1, 12), status: "Rescheduled", text: "Moved to a new time by the patient" });
+    const notifications = bookings.filter((b) => b.status !== "Completed").map((b, i) => ({
+      id: "n-seed-" + i, patientId: b.patientId, bookingId: b.id, createdAt: b.history[b.history.length - 1].at, read: i > 3,
+      text: `${b.reference}: ${b.history[b.history.length - 1].text}`,
+    }));
+    return {
+      version: MC.VERSION, providers, services, slots, patients, staff, bookings, notifications,
+      signedInPatientId: null, staffId: null, siteNotice: "Pilot running in ten Greater Manchester boroughs. Some providers only take bookings by phone.",
+    };
+  };
+
+  // ---------- rules ----------
+  MC.isActive = (b) => b.status === "Requested" || b.status === "Confirmed";
+  MC.canCancelOnline = (b, now = new Date()) => MC.isActive(b) && MC.slotDate(b.date, b.time).getTime() - now.getTime() > 24 * 3600 * 1000;
+  MC.isUpcoming = (b, now = new Date()) => MC.isActive(b) && MC.slotDate(b.date, b.time) > now;
+  MC.visibleProviders = (s) => s.providers.filter((p) => p.listingStatus === "Approved");
+  MC.freeSlots = (s, providerId, now = new Date()) =>
+    s.slots.filter((x) => x.providerId === providerId && !x.booked && MC.slotDate(x.date, x.time) > now)
+      .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+  MC.nextAvailable = (s, providerId) => MC.freeSlots(s, providerId)[0] || null;
+  MC.SYMPTOM_WORDS = ["pain", "chest", "bleeding", "breath", "breathing", "fever", "rash", "dizzy", "headache", "lump", "suicidal", "overdose", "faint", "vomit", "injury", "swelling"];
+  MC.containsSymptom = (q) => MC.SYMPTOM_WORDS.some((w) => q.toLowerCase().split(/[^a-z]+/).includes(w));
+  MC.search = function (s, f) {
+    const q = (f.q || "").trim().toLowerCase();
+    return MC.visibleProviders(s).filter((p) => {
+      if (f.borough && p.borough !== f.borough) return false;
+      if (f.type && p.type !== f.type) return false;
+      if (f.mode && p.bookingMode !== f.mode) return false;
+      if (f.evening && !p.evening) return false;
+      if (f.online && !MC.nextAvailable(s, p.id)) return false;
+      if (q && !MC.containsSymptom(q)) {
+        const svc = s.services.filter((x) => x.providerId === p.id && !x.archived).map((x) => x.name).join(" ");
+        const hay = `${p.name} ${p.type} ${p.borough} ${p.postcodeDistrict} ${svc}`.toLowerCase();
+        if (!q.split(/\s+/).every((w) => hay.includes(w))) return false;
+      }
+      return true;
+    });
+  };
+
+  function notify(s, b, text, now) {
+    return [{ id: newId("n"), patientId: b.patientId, bookingId: b.id, text: `${b.reference}: ${text}`, createdAt: now.toISOString(), read: false }, ...s.notifications];
+  }
+  const setSlot = (slots, id, booked) => slots.map((x) => (x.id === id ? Object.assign({}, x, { booked }) : x));
+  function update(s, id, fn, text, now, changes = []) {
+    const old = s.bookings.find((b) => b.id === id);
+    if (!old) throw new Error("Booking not found");
+    const b = fn(old);
+    let slots = s.slots;
+    for (const [sid, v] of changes) if (sid) slots = setSlot(slots, sid, v);
+    return Object.assign({}, s, { slots, bookings: s.bookings.map((x) => (x.id === id ? b : x)), notifications: notify(s, b, text, now) });
+  }
+  const withHist = (b, now, status, text, extra = {}) => Object.assign({}, b, extra, { history: b.history.concat([{ at: now.toISOString(), status, text }]) });
+
+  MC.createBooking = function (s, input, now = new Date(), reference = MC.randomReference()) {
+    const slot = s.slots.find((x) => x.id === input.slotId);
+    const service = s.services.find((x) => x.id === input.serviceId);
+    if (!slot || slot.booked) throw new Error("This time is no longer available. Please choose another.");
+    if (!service || service.providerId !== slot.providerId) throw new Error("Service not found");
+    const status = service.bookingMode === "instant" ? "Confirmed" : "Requested";
+    const text = status === "Confirmed" ? "Your appointment is booked" : "Your request was sent to the provider";
+    const booking = {
+      id: newId("b"), synthetic: true, reference, patientId: input.patientId, providerId: service.providerId, serviceId: service.id, slotId: slot.id,
+      date: slot.date, time: slot.time, status, createdAt: now.toISOString(), patientName: input.patientName, dateOfBirth: input.dateOfBirth,
+      contactPreference: input.contactPreference, note: (input.note || "").slice(0, 200), history: [{ at: now.toISOString(), status, text }],
+    };
+    return { booking, state: Object.assign({}, s, { slots: setSlot(s.slots, slot.id, true), bookings: s.bookings.concat([booking]), notifications: notify(s, booking, text, now) }) };
+  };
+  MC.cancelBooking = function (s, id, by, reason, now = new Date()) {
+    const b = s.bookings.find((x) => x.id === id);
+    if (!b || !MC.isActive(b)) throw new Error("This booking cannot be cancelled");
+    if (by === "patient" && !MC.canCancelOnline(b, now)) throw new Error("This booking can no longer be cancelled online");
+    const text = `Cancelled by ${by === "patient" ? "you" : "the provider"}${reason ? ": " + reason : ""}`;
+    return update(s, id, (x) => withHist(x, now, "Cancelled", text, { status: "Cancelled", cancelledBy: by, cancelReason: reason }), text, now, [[b.slotId, false]]);
+  };
+  MC.confirmBooking = function (s, id, now = new Date()) {
+    const b = s.bookings.find((x) => x.id === id);
+    if (!b || b.status !== "Requested") throw new Error("Only requested bookings can be confirmed");
+    const text = "The provider confirmed your request";
+    return update(s, id, (x) => withHist(x, now, "Confirmed", text, { status: "Confirmed" }), text, now);
+  };
+  MC.declineBooking = function (s, id, reason, now = new Date()) {
+    const b = s.bookings.find((x) => x.id === id);
+    if (!b || b.status !== "Requested") throw new Error("Only requested bookings can be declined");
+    if (!reason) throw new Error("A reason is required");
+    const text = "The provider declined: " + reason;
+    return update(s, id, (x) => withHist(x, now, "Declined", text, { status: "Declined", declineReason: reason }), text, now, [[b.slotId, false]]);
+  };
+  MC.completeBooking = function (s, id, now = new Date()) {
+    const b = s.bookings.find((x) => x.id === id);
+    if (!b || b.status !== "Confirmed" || MC.slotDate(b.date, b.time) > now) throw new Error("Only past confirmed bookings can be completed");
+    const text = "The appointment took place";
+    return update(s, id, (x) => withHist(x, now, "Completed", text, { status: "Completed" }), text, now);
+  };
+  MC.rescheduleBooking = function (s, id, newSlotId, now = new Date()) {
+    const b = s.bookings.find((x) => x.id === id);
+    const slot = s.slots.find((x) => x.id === newSlotId);
+    const service = b && s.services.find((x) => x.id === b.serviceId);
+    if (!b || !service || !MC.canCancelOnline(b, now)) throw new Error("This booking cannot be rescheduled online");
+    if (!slot || slot.booked || slot.providerId !== b.providerId) throw new Error("This time is no longer available");
+    const instant = service.bookingMode === "instant";
+    const when = `${MC.formatDate(slot.date)} at ${slot.time}`;
+    const text = instant ? "Rescheduled to " + when : "Rescheduled, awaiting provider: " + when;
+    return update(s, id, (x) => withHist(x, now, "Rescheduled", text, { slotId: slot.id, date: slot.date, time: slot.time, status: instant ? "Confirmed" : "Requested" }),
+      text, now, [[b.slotId, false], [slot.id, true]]);
+  };
+  MC.simulateReminders = function (s, now = new Date()) {
+    const limit = now.getTime() + 48 * 3600 * 1000;
+    const due = s.bookings.filter((b) => b.status === "Confirmed" && MC.slotDate(b.date, b.time) > now && MC.slotDate(b.date, b.time).getTime() <= limit
+      && !s.notifications.some((n) => n.bookingId === b.id && n.text.includes("Reminder")));
+    let st = s;
+    for (const b of due) st = Object.assign({}, st, { notifications: notify(st, b, `Reminder: your appointment is on ${MC.formatDate(b.date)} at ${b.time}`, now) });
+    return { state: st, count: due.length };
+  };
+  MC.findByReference = (s, ref, dob) =>
+    s.bookings.find((x) => x.reference.toUpperCase() === ref.trim().toUpperCase() && x.dateOfBirth === dob) || null;
+
+  // ---------- provider workspace ----------
+  MC.addSlot = function (s, providerId, date, time) {
+    if (s.slots.some((x) => x.providerId === providerId && x.date === date && x.time === time)) throw new Error("A time already exists then");
+    return Object.assign({}, s, { slots: s.slots.concat([{ id: `sl-${providerId}-${date}-${time.replace(":", "")}`, providerId, date, time, booked: false }]) });
+  };
+  MC.removeSlot = function (s, slotId) {
+    const sl = s.slots.find((x) => x.id === slotId);
+    if (!sl) throw new Error("Time not found");
+    if (sl.booked) throw new Error("Booked times cannot be removed. Cancel the booking first.");
+    return Object.assign({}, s, { slots: s.slots.filter((x) => x.id !== slotId) });
+  };
+  MC.setListing = (s, providerId, status) =>
+    Object.assign({}, s, { providers: s.providers.map((p) => (p.id === providerId ? Object.assign({}, p, { listingStatus: status }) : p)) });
+
+  // ---------- metrics ----------
+  MC.completeness = (p, s) => {
+    const fields = [p.description, p.phone, p.email, p.address, p.openingHours, p.bookingInstructions, p.cancellationRule];
+    let score = fields.filter((f) => f && String(f).trim()).length;
+    const svc = s.services.filter((x) => x.providerId === p.id && !x.archived).length > 0;
+    const sl = s.slots.some((x) => x.providerId === p.id);
+    return Math.round(((score + (svc ? 1 : 0) + (sl ? 1 : 0)) / 9) * 100);
+  };
+  MC.metrics = function (s) {
+    const active = MC.visibleProviders(s).length;
+    const avgComplete = Math.round(s.providers.reduce((a, p) => a + MC.completeness(p, s), 0) / s.providers.length);
+    const requests = s.bookings.filter((b) => b.history[0].status === "Requested");
+    const decided = requests.filter((b) => b.history.some((h, i) => i > 0 && (h.status === "Confirmed" || h.status === "Declined")));
+    const confirmed = decided.filter((b) => b.history.some((h, i) => i > 0 && h.status === "Confirmed"));
+    const hours = decided.map((b) => {
+      const d = b.history.find((h, i) => i > 0 && (h.status === "Confirmed" || h.status === "Declined"));
+      return (new Date(d.at) - new Date(b.history[0].at)) / 3600000;
+    });
+    const cancelled = s.bookings.filter((b) => b.status === "Cancelled").length;
+    const declines = {};
+    for (const b of s.bookings) if (b.status === "Declined") declines[b.declineReason] = (declines[b.declineReason] || 0) + 1;
+    return {
+      activeProviders: active, totalProviders: s.providers.length, pending: s.providers.filter((p) => p.listingStatus === "Pending review").length,
+      completeness: avgComplete, bookings: s.bookings.length, requests: requests.length, awaiting: s.bookings.filter((b) => b.status === "Requested").length,
+      confirmationRate: decided.length ? Math.round((confirmed.length / decided.length) * 100) : 0,
+      avgDecisionHours: hours.length ? Math.round((hours.reduce((a, b) => a + b, 0) / hours.length) * 10) / 10 : 0,
+      cancellationRate: s.bookings.length ? Math.round((cancelled / s.bookings.length) * 100) : 0, declines,
+    };
+  };
+
+  if (typeof module !== "undefined") module.exports = MC; else root.MC = MC;
+})(this);
+
+</script>
+<script>
+/* MediConnect prototype UI. Front end only. All data is synthetic and kept in this browser. */
+(function () {
+  const KEY = "mediconnect-proto-v3";
+  let mem = null;
+  function load() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (raw) { const p = JSON.parse(raw); if (p && p.version === MC.VERSION) return p; }
+    } catch (e) { /* storage unavailable */ }
+    return mem || MC.createSeed();
+  }
+  let S = load();
+  function save() { mem = S; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* keep in memory */ } }
+  save();
+
+  const ui = { filters: { q: "", borough: "", type: "", mode: "", evening: false, online: false }, slotId: null, errors: {}, form: {}, modal: null,
+    justBooked: false, signInError: "", tabFilter: "all", editService: null, toast: "" };
+
+  const $ = (sel) => document.querySelector(sel);
+  const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const prov = (id) => S.providers.find((p) => p.id === id);
+  const svc = (id) => S.services.find((s) => s.id === id);
+  const go = (h) => { if (location.hash === "#" + h) render(); else location.hash = h; };
+  const announce = (t) => { const l = $("#live"); l.textContent = ""; setTimeout(() => (l.textContent = t), 30); };
+  const toast = (t) => { ui.toast = t; announce(t); };
+
+  const ICON = {
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    check: '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/>',
+    x: '<circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/>',
+    slash: '<circle cx="12" cy="12" r="9"/><path d="M6 18L18 6"/>',
+    history: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 8v4l3 2"/>',
+    bell: '<path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+    arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+    phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+    alert: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/>',
+  };
+  const icon = (n, cls = "") => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${ICON[n]}</svg>`;
+  const LOGO = `<svg viewBox="0 0 32 32" class="logo-mark" aria-hidden="true"><circle cx="8" cy="16" r="4"/><circle cx="24" cy="8" r="4"/><circle cx="24" cy="24" r="4"/><path d="M11.5 14l9-4.5M11.5 18l9 4.5"/></svg>`;
+
+  function badge(status, withText = false) {
+    const m = MC.STATUSES[status];
+    return `<span class="badge b-${m.cls}">${icon(m.icon)}<span>${status}</span></span>${withText ? `<span class="badge-text">${m.text}</span>` : ""}`;
+  }
+  function listingBadge(st) {
+    const cls = st === "Approved" ? "confirmed" : st === "Hidden" ? "cancelled" : "requested";
+    return `<span class="badge b-${cls}">${icon(st === "Approved" ? "check" : st === "Hidden" ? "slash" : "clock")}<span>${st}</span></span>`;
+  }
+  const modeText = (m) => (m === "instant" ? "Instant booking: confirmed straight away" : "Request booking: the provider confirms or declines");
+  const empty = (title, body) => `<div class="empty"><h3>${title}</h3><div>${body}</div></div>`;
+  const contactLine = (p) => `<p class="contact">${icon("phone")} Phone <strong>${esc(p.phone)}</strong> or email <strong>${esc(p.email)}</strong></p>`;
+  const patientName = () => {
+    const id = S.signedInPatientId; if (!id) return null;
+    const p = S.patients.find((x) => x.id === id);
+    if (p) return p.firstName + " " + p.lastName;
+    const b = S.bookings.find((x) => x.patientId === id); return b ? b.patientName : "Guest";
+  };
+  const unread = () => S.notifications.filter((n) => n.patientId === S.signedInPatientId && !n.read).length;
+
+  // ---------- area and header ----------
+  function area(r) {
+    if (r.startsWith("workspace")) return "provider";
+    if (r.startsWith("admin")) return "admin";
+    if (r === "" || r === "start" || r === "about") return "start";
+    return "patient";
+  }
+  function header(r) {
+    const a = area(r);
+    let nav = "";
+    if (a === "patient") {
+      const name = patientName();
+      nav = `<a href="#search">Find a provider</a><a href="#my-bookings">My bookings</a>` + (name
+        ? `<a href="#notifications" class="bell" aria-label="Notifications, ${unread()} unread">${icon("bell")}${unread() ? `<span class="count">${unread()}</span>` : ""}</a>
+           <span class="who">Signed in as <strong>${esc(name)}</strong></span><button class="linkbtn" data-act="patient-signout">Sign out</button>`
+        : `<a href="#sign-in">Sign in</a>`);
+    } else if (a === "provider") {
+      const st = S.staff.find((x) => x.id === S.staffId);
+      nav = st ? `<span class="who">${esc(st.name)}, ${esc(prov(st.providerId).name)}</span><button class="linkbtn" data-act="staff-signout">Sign out</button>` : "";
+    } else if (a === "admin") nav = `<span class="who">Sam Taylor, platform admin (simulated)</span>`;
+    const role = a === "start" ? "" : a;
+    $("#hdr").innerHTML = `
+      <div class="wrap hdr-in">
+        <a class="brand" href="#${a === "provider" ? "workspace" : a === "admin" ? "admin" : "patient"}">${LOGO}<span>MediConnect<small>Greater Manchester</small></span></a>
+        <nav aria-label="Main">${nav}</nav>
+        <label class="role">Viewing as
+          <select id="role-switch">
+            <option value="" ${!role ? "selected" : ""}>Choose a role</option>
+            <option value="patient" ${role === "patient" ? "selected" : ""}>Patient</option>
+            <option value="provider" ${role === "provider" ? "selected" : ""}>Provider staff</option>
+            <option value="admin" ${role === "admin" ? "selected" : ""}>Platform admin</option>
+          </select></label>
+      </div>`;
+  }
+
+  // ---------- start ----------
+  function vStart() {
+    return `<section class="hero"><h1 tabindex="-1">MediConnect prototype</h1>
+      <p class="lead">A clickable MVP prototype for booking local health appointments across Greater Manchester. Choose a role to explore. Every view shares the same synthetic data, so a booking made as a patient appears in the provider's queue.</p></section>
+      <div class="cards3">
+        <a class="role-card" href="#patient"><h2>Patient</h2><p>Search providers, view services, book or request an appointment, then manage it in My bookings.</p><span class="go">Start as a patient ${icon("arrow")}</span></a>
+        <a class="role-card" href="#workspace"><h2>Provider staff</h2><p>Priya at Deane Road (request booking) or Mark at Stretford Physio (instant booking). Manage requests, schedule and services.</p><span class="go">Open the provider workspace ${icon("arrow")}</span></a>
+        <a class="role-card" href="#admin"><h2>Platform admin</h2><p>Sam reviews provider listings, sets a site notice and views pilot metrics.</p><span class="go">Open the admin console ${icon("arrow")}</span></a>
+      </div>
+      <div class="panel"><h2>Suggested test path</h2><ol class="steps">
+        <li>As a patient, search for "GP" in Bolton and send a request to Deane Road Medical Practice.</li>
+        <li>Switch to Provider staff, sign in as Priya and confirm or decline the request.</li>
+        <li>Switch back to Patient and open My bookings or Notifications to see the new status.</li>
+        <li>As Platform admin, approve Walmersley Road Surgery and see it appear in search.</li></ol>
+        <p><a href="#about">Read the prototype notes and known limitations</a></p></div>`;
+  }
+  function vAbout() {
+    return `<h1 tabindex="-1">Prototype notes</h1>
+      <div class="panel"><h2>What works in this prototype</h2><ul>
+        <li>Search with filters, provider profiles and service details.</li>
+        <li>Booking against real slots in the shared synthetic data: instant bookings are Confirmed, request bookings are Requested.</li>
+        <li>Booking references, status history, cancel (more than 24 hours before) and reschedule, with the old time released.</li>
+        <li>Provider confirm, decline with a reason, cancel with a reason, mark as completed, schedule, services and profile editing.</li>
+        <li>Admin listing review (approve, hide, restore), site notice and live metrics calculated from the data.</li></ul></div>
+      <div class="panel"><h2>What is simulated</h2><ul>
+        <li>Sign in for patients, provider staff and the admin. NHS login is not used and there are no passwords.</li>
+        <li>Notifications and reminders. No email or text message is ever sent.</li>
+        <li>The passage of time for reminders, using the "Simulate time" button.</li></ul></div>
+      <div class="panel"><h2>Known limitations</h2><ul>
+        <li>Front end only. Data is saved in this browser, so other people and devices will not see your changes.</li>
+        <li>All providers, patients and bookings are invented. Phone numbers use the Ofcom drama range and emails use example.org.</li>
+        <li>Availability is held per provider rather than per clinician or per service.</li>
+        <li>No clinical triage, no payments and no integration with NHS or practice systems.</li></ul>
+        <p><button class="btn ghost" data-act="reset">Reset demo data</button></p></div>`;
+  }
+
+  // ---------- patient ----------
+  function safety() {
+    return `<aside class="safety" aria-labelledby="safety-h"><h2 id="safety-h">${icon("alert")} If you need help now</h2>
+      <p><strong>Call 999</strong> in a medical emergency. For urgent advice, <strong>call NHS 111</strong> or visit 111.nhs.uk. MediConnect does not give medical advice and cannot tell you what care you need.</p></aside>`;
+  }
+  function vPatientHome() {
+    return `${S.siteNotice ? `<div class="notice" role="status">${icon("info")} <span>${esc(S.siteNotice)}</span></div>` : ""}
+      <section class="hero"><h1 tabindex="-1">Find and book local health appointments</h1>
+      <p class="lead">MediConnect is an independent booking service for Greater Manchester. We are not part of the NHS. We show appointments that local providers choose to list, and the provider stays responsible for your care.</p>
+      <form id="home-search" class="searchbar" role="search"><label for="hq">Service or provider</label>
+        <div class="row"><input id="hq" name="q" placeholder="For example GP, dental check up, physio"><select name="borough" aria-label="Borough"><option value="">All boroughs</option>${MC.BOROUGHS.map((b) => `<option>${b}</option>`).join("")}</select>
+        <button class="btn">Search</button></div></form></section>
+      ${safety()}
+      <div class="cards3">
+        <div class="panel"><h2>How it works</h2><ol class="steps"><li>Search by service, provider or borough.</li><li>Pick a time the provider has listed.</li><li>Instant bookings are confirmed straight away. Requests are confirmed or declined by the provider.</li></ol></div>
+        <div class="panel"><h2>Pilot limitations</h2><ul><li>Ten boroughs and a small number of providers.</li><li>Some providers only take bookings by phone.</li><li>Times shown are indicative until the provider confirms.</li><li>This prototype uses synthetic data only.</li></ul></div>
+        <div class="panel"><h2>Already booked?</h2><p>See, cancel or move your appointments.</p><p><a class="btn ghost" href="#my-bookings">Go to My bookings</a></p></div>
+      </div>`;
+  }
+  function resultsHtml() {
+    const f = ui.filters;
+    const list = MC.search(S, f);
+    const warn = f.q && MC.containsSymptom(f.q)
+      ? `<div class="safety small" role="alert">${icon("alert")} <div><strong>We can't help you decide what care you need.</strong> If you're worried about symptoms, call NHS 111, or 999 in an emergency. You can still browse providers below.</div></div>` : "";
+    return `${warn}<p class="count-line" aria-live="polite">${list.length} provider${list.length === 1 ? "" : "s"} found</p>` + (list.length ? `<ul class="results">${list.map((p) => {
+      const n = MC.nextAvailable(S, p.id);
+      return `<li class="card"><div class="card-main"><h3><a href="#provider-${p.id}">${esc(p.name)}</a></h3>
+        <p class="meta">${esc(p.type)} · ${esc(p.borough)} ${esc(p.postcodeDistrict)}</p>
+        <p class="mode mode-${p.bookingMode}">${modeText(p.bookingMode)}</p>
+        <p>${n ? `Next available: <strong>${MC.formatDate(n.date)} at ${n.time}</strong>` : "No online times. Please phone to book."}</p></div>
+        <a class="btn ghost" href="#provider-${p.id}">View provider</a></li>`;
+    }).join("")}</ul>` : empty("No providers match", "Try removing a filter or searching a different borough."));
+  }
+  function vSearch() {
+    const f = ui.filters;
+    const opt = (arr, v) => arr.map((x) => `<option value="${x[0]}" ${v === x[0] ? "selected" : ""}>${x[1]}</option>`).join("");
+    return `<h1 tabindex="-1">Find a provider</h1>
+      <div class="layout2"><form id="search-form" class="filters panel" role="search"><h2 class="h3">Filters</h2>
+        <label>Service or provider<input name="q" value="${esc(f.q)}"></label>
+        <label>Borough<select name="borough">${opt([["", "All boroughs"], ...MC.BOROUGHS.map((b) => [b, b])], f.borough)}</select></label>
+        <label>Type of provider<select name="type">${opt([["", "All types"], ...["GP practice", "Dental", "Physiotherapy", "Optician", "Pharmacy clinic", "Counselling"].map((t) => [t, t])], f.type)}</select></label>
+        <label>Booking type<select name="mode">${opt([["", "Any"], ["instant", "Instant booking"], ["request", "Request booking"]], f.mode)}</select></label>
+        <label class="check"><input type="checkbox" name="online" ${f.online ? "checked" : ""}> Has online times</label>
+        <label class="check"><input type="checkbox" name="evening" ${f.evening ? "checked" : ""}> Evening appointments</label>
+        <div class="row"><button class="btn">Apply</button><button type="button" class="btn ghost" data-act="clear-filters">Clear</button></div></form>
+      <div id="results">${resultsHtml()}</div></div>`;
+  }
+  function vProvider(id) {
+    const p = prov(id);
+    if (!p || p.listingStatus !== "Approved") return `<h1 tabindex="-1">Provider not available</h1>${empty("This listing is not available", `It may be under review. <a href="#search">Back to search</a>`)}`;
+    const services = S.services.filter((s) => s.providerId === id && !s.archived);
+    const hasSlots = !!MC.nextAvailable(S, id);
+    return `<p><a href="#search">Back to results</a></p>
+      <h1 tabindex="-1">${esc(p.name)}</h1><p class="meta">${esc(p.type)} · ${esc(p.borough)}</p>
+      <div class="layout2 rev"><div>
+        <div class="panel"><h2>About</h2><p>${esc(p.description)}</p><p class="mode mode-${p.bookingMode}">${modeText(p.bookingMode)}</p><p>${esc(p.bookingInstructions)}</p></div>
+        <div class="panel"><h2>Services</h2>${services.length ? `<ul class="svc-list">${services.map((s) => `<li><div><h3>${esc(s.name)}</h3><p>${esc(s.description)}</p><p class="meta">${esc(s.eligibilityNote)}</p></div>
+          ${hasSlots ? `<a class="btn" href="#book-${s.id}" aria-label="View availability for ${esc(s.name)}">View availability</a>` : `<span class="meta">Phone to book</span>`}</li>`).join("")}</ul>` : "<p>No services listed.</p>"}
+          ${hasSlots ? "" : `<p>This provider does not offer online times in the pilot.</p>${contactLine(p)}`}</div></div>
+        <div class="panel"><h2>Contact and opening hours</h2><p>${esc(p.address)}, ${esc(p.postcodeDistrict)}</p>${contactLine(p)}<p>${esc(p.openingHours)}</p><h3>Cancellation rule</h3><p>${esc(p.cancellationRule)}</p></div>
+      </div>`;
+  }
+  function slotPicker(providerId, selected, act) {
+    const free = MC.freeSlots(S, providerId);
+    if (!free.length) return null;
+    const days = {};
+    for (const s of free) (days[s.date] = days[s.date] || []).push(s);
+    return Object.keys(days).slice(0, 10).map((d) => `<div class="day"><h3>${MC.formatDateLong(d)}</h3><div class="times">${days[d].map((s) =>
+      `<button type="button" class="time" data-act="${act}" data-id="${s.id}" aria-pressed="${s.id === selected}" aria-label="${MC.formatDateLong(d)} at ${s.time}">${s.time}</button>`).join("")}</div></div>`).join("");
+  }
+  function field(name, label, inner, hint = "") {
+    const err = ui.errors[name];
+    return `<div class="field ${err ? "has-err" : ""}"><label for="f-${name}">${label}</label>${hint ? `<p class="hint" id="h-${name}">${hint}</p>` : ""}
+      ${err ? `<p class="err" id="e-${name}">${icon("alert")} ${err}</p>` : ""}${inner}</div>`;
+  }
+  const desc = (name, hint) => { const ids = [hint ? "h-" + name : "", ui.errors[name] ? "e-" + name : ""].filter(Boolean).join(" "); return ids ? `aria-describedby="${ids}"` : ""; };
+  function dobInputs(prefix, val) {
+    const [y, m, d] = (val || "").split("-");
+    const inv = ui.errors[prefix] ? 'aria-invalid="true"' : "";
+    return `<div class="dob" role="group" aria-label="Date of birth" ${desc(prefix, "For example 14 3 1992")}>
+      <label>Day<input id="f-${prefix}" name="${prefix}-d" inputmode="numeric" maxlength="2" value="${esc(d ? +d : "")}" ${inv}></label>
+      <label>Month<input name="${prefix}-m" inputmode="numeric" maxlength="2" value="${esc(m ? +m : "")}" ${inv}></label>
+      <label>Year<input name="${prefix}-y" inputmode="numeric" maxlength="4" class="yr" value="${esc(y || "")}" ${inv}></label></div>`;
+  }
+  function readDob(fd, prefix) {
+    const d = +fd.get(prefix + "-d"), m = +fd.get(prefix + "-m"), y = +fd.get(prefix + "-y");
+    const dt = new Date(y, m - 1, d);
+    if (!d || !m || !y || y < 1900 || dt.getMonth() !== m - 1 || dt > new Date()) return null;
+    return MC.iso(dt);
+  }
+  function vBook(sid) {
+    const s = svc(sid); const p = s && prov(s.providerId);
+    if (!s || !p || p.listingStatus !== "Approved" || s.archived) return `<h1 tabindex="-1">Service not available</h1><p><a href="#search">Back to search</a></p>`;
+    const picker = slotPicker(p.id, ui.slotId, "pick-slot");
+    const slot = ui.slotId && S.slots.find((x) => x.id === ui.slotId && !x.booked);
+    const pt = S.patients.find((x) => x.id === S.signedInPatientId);
+    const f = Object.assign({ name: pt ? pt.firstName + " " + pt.lastName : "", dob: pt ? pt.dateOfBirth : "", contact: pt ? pt.contactPreference : "", note: "" }, ui.form);
+    const errs = Object.keys(ui.errors);
+    return `<p><a href="#provider-${p.id}">Back to ${esc(p.name)}</a></p>
+      <h1 tabindex="-1">${esc(s.name)}</h1><p class="meta">${esc(p.name)} · ${s.durationMinutes} minutes · ${s.bookingMode === "instant" ? "Instant booking" : "Request booking"}</p>
+      <div class="panel"><h2>Choose a time</h2><p class="label-ind">${icon("info")} Indicative availability, confirmed by the provider</p>
+        ${picker || empty("No online times available", `Please contact the provider to book.${contactLine(p)}`)}</div>
+      ${slot ? `<form id="book-form" class="panel" novalidate><h2 id="details-h" tabindex="-1">Your details</h2>
+        <p>Selected time: <strong>${MC.formatDateLong(slot.date)} at ${slot.time}</strong></p>
+        ${errs.length ? `<div class="err-summary" role="alert" tabindex="-1" id="err-sum"><h3>There is a problem</h3><ul>${errs.map((k) => `<li><a href="#f-${k}" data-act="focus-field" data-id="f-${k}">${ui.errors[k]}</a></li>`).join("")}</ul></div>` : ""}
+        ${field("name", "Full name", `<input id="f-name" name="name" autocomplete="name" value="${esc(f.name)}" ${ui.errors.name ? 'aria-invalid="true"' : ""} ${desc("name")}>`)}
+        ${field("dob", "Date of birth", dobInputs("dob", f.dob), "For example 14 3 1992")}
+        ${field("contact", "How should the provider contact you?", `<div class="radios" role="radiogroup" ${desc("contact")}>
+          <label class="check"><input id="f-contact" type="radio" name="contact" value="email" ${f.contact === "email" ? "checked" : ""}> Email</label>
+          <label class="check"><input type="radio" name="contact" value="phone" ${f.contact === "phone" ? "checked" : ""}> Phone</label></div>`)}
+        ${field("note", "Note for the provider (optional)", `<textarea id="f-note" name="note" rows="3" maxlength="200" ${desc("note", 1)}>${esc(f.note)}</textarea><p class="counter" aria-live="polite"><span id="note-count">${f.note.length}</span> of 200 characters</p>`, "Please don't include detailed medical information.")}
+        <p class="meta">This prototype uses synthetic data. Please use a test patient or made up details.</p>
+        <button class="btn">${s.bookingMode === "instant" ? "Book appointment" : "Send request"}</button></form>` : ""}`;
+  }
+  function nextSteps(b) {
+    return { Requested: "The provider will confirm or decline. You'll see the update in My bookings.",
+      Confirmed: "Your appointment is booked. Arrive a few minutes early. To change it, use My bookings.",
+      Declined: "The provider could not offer this time. You can choose another time or another provider.",
+      Cancelled: "This appointment will not go ahead. You can book again at any time.",
+      Completed: "This appointment has taken place." }[b.status];
+  }
+  function timeline(b) {
+    return `<ol class="timeline">${b.history.slice().reverse().map((h) => `<li><span class="tl-dot tl-${h.status === "Rescheduled" ? "resched" : MC.STATUSES[h.status].cls}"></span>
+      <div><strong>${h.status}</strong> <span class="meta">${MC.formatStamp(h.at)}</span><p>${esc(h.text)}</p></div></li>`).join("")}</ol>`;
+  }
+  function vBooking(id) {
+    const b = S.bookings.find((x) => x.id === id);
+    if (!b) return `<h1 tabindex="-1">Booking not found</h1><p><a href="#my-bookings">Go to My bookings</a></p>`;
+    if (S.signedInPatientId !== b.patientId) return `<h1 tabindex="-1">Sign in to see this booking</h1><p>For your privacy, booking details are shown only to the patient.</p><p><a class="btn" href="#sign-in">Sign in</a></p>`;
+    const p = prov(b.providerId), s = svc(b.serviceId);
+    const just = ui.justBooked; ui.justBooked = false;
+    const canChange = MC.canCancelOnline(b);
+    return `<p><a href="#my-bookings">Back to My bookings</a></p>
+      <h1 tabindex="-1">${just ? (b.status === "Confirmed" ? "Appointment booked" : "Request sent") : "Booking details"}</h1>
+      ${just ? `<div class="confirm-box" role="status">${badge(b.status)}<p>Your booking reference is <strong class="ref">${b.reference}</strong>. Keep it to sign in and manage this booking.</p></div>` : ""}
+      <div class="layout2 rev"><div class="panel">
+        <dl class="dl"><dt>Reference</dt><dd class="ref">${b.reference}</dd><dt>Status</dt><dd>${badge(b.status, true)}</dd>
+        <dt>Provider</dt><dd><a href="#provider-${p.id}">${esc(p.name)}</a><br><span class="meta">${esc(p.address)}</span></dd>
+        <dt>Service</dt><dd>${esc(s.name)}</dd><dt>Date and time</dt><dd>${MC.formatDateLong(b.date)} at ${b.time}</dd>
+        <dt>Contact preference</dt><dd>${b.contactPreference === "phone" ? "Phone" : "Email"}</dd>
+        ${b.note ? `<dt>Your note</dt><dd>${esc(b.note)}</dd>` : ""}
+        ${b.declineReason && b.status === "Declined" ? `<dt>Reason given</dt><dd>${esc(b.declineReason)}</dd>` : ""}
+        ${b.status === "Cancelled" ? `<dt>Cancelled by</dt><dd>${b.cancelledBy === "patient" ? "You" : "The provider"}${b.cancelReason ? ": " + esc(b.cancelReason) : ""}</dd>` : ""}</dl>
+        <h2>What happens next</h2><p>${nextSteps(b)}</p>
+        ${canChange ? `<div class="row"><a class="btn ghost" href="#reschedule-${b.id}">Change time</a><button class="btn danger" data-act="open-cancel" data-id="${b.id}">Cancel booking</button></div>`
+          : MC.isActive(b) ? `<div class="notice">${icon("info")} <div>This booking can no longer be cancelled online. Please contact the provider.${contactLine(p)}</div></div>` : ""}
+        ${b.status === "Declined" || b.status === "Cancelled" ? `<p><a class="btn" href="#provider-${p.id}">Book again with ${esc(p.name)}</a></p>` : ""}
+      </div><div class="panel"><h2>Status history</h2>${timeline(b)}</div></div>`;
+  }
+  function vReschedule(id) {
+    const b = S.bookings.find((x) => x.id === id);
+    if (!b || S.signedInPatientId !== b.patientId) return `<h1 tabindex="-1">Booking not found</h1>`;
+    if (!MC.canCancelOnline(b)) return `<h1 tabindex="-1">This booking can't be changed online</h1>${contactLine(prov(b.providerId))}`;
+    const s = svc(b.serviceId), p = prov(b.providerId);
+    const picker = slotPicker(p.id, ui.slotId, "pick-slot");
+    return `<p><a href="#booking-${b.id}">Back to booking</a></p><h1 tabindex="-1">Choose a new time</h1>
+      <p>${esc(s.name)} at ${esc(p.name)}. Current time: <strong>${MC.formatDateLong(b.date)} at ${b.time}</strong>.</p>
+      <p class="meta">${s.bookingMode === "instant" ? "Your booking stays confirmed at the new time." : "The provider will need to confirm the new time. Your booking will show as Requested until they do."} Your current time will be released.</p>
+      <div class="panel"><p class="label-ind">${icon("info")} Indicative availability, confirmed by the provider</p>${picker || empty("No other times available", contactLine(p))}</div>
+      ${ui.slotId ? `<button class="btn" data-act="do-reschedule" data-id="${b.id}">${s.bookingMode === "instant" ? "Confirm new time" : "Send new time request"}</button>` : ""}`;
+  }
+  function vSignIn() {
+    return `<h1 tabindex="-1">Sign in</h1>
+      <div class="notice">${icon("info")} <span>This prototype uses simulated sign in. NHS login is not used.</span></div>
+      <div class="cards2"><form id="signin-test" class="panel"><h2>Use a test patient</h2><fieldset><legend class="sr">Test patients</legend>
+        ${S.patients.map((p, i) => `<label class="check"><input type="radio" name="pid" value="${p.id}" ${i === 0 ? "checked" : ""}> ${esc(p.firstName)} ${esc(p.lastName)} <span class="meta">${esc(p.borough)}</span></label>`).join("")}</fieldset>
+        <button class="btn">Sign in as test patient</button></form>
+      <form id="signin-ref" class="panel" novalidate><h2>Use a booking reference</h2>
+        ${ui.signInError ? `<p class="err" role="alert">${icon("alert")} ${ui.signInError}</p>` : ""}
+        <label for="f-ref">Booking reference</label><input id="f-ref" name="ref" placeholder="MC-123456" autocomplete="off">
+        <p><strong>Date of birth</strong></p>${dobInputs("rdob", "")}
+        <button class="btn">Find my bookings</button></form></div>`;
+  }
+  function bookingCard(b) {
+    const p = prov(b.providerId), s = svc(b.serviceId);
+    return `<li class="card"><div class="card-main"><h3><a href="#booking-${b.id}">${esc(s.name)}</a></h3><p>${esc(p.name)}</p>
+      <p><strong>${MC.formatDateLong(b.date)} at ${b.time}</strong> · <span class="ref">${b.reference}</span></p><p>${badge(b.status, true)}</p></div>
+      <a class="btn ghost" href="#booking-${b.id}">View</a></li>`;
+  }
+  function vMyBookings() {
+    if (!S.signedInPatientId) { ui.redirect = "my-bookings"; return vSignIn(); }
+    const mine = S.bookings.filter((b) => b.patientId === S.signedInPatientId);
+    const up = mine.filter((b) => MC.isUpcoming(b)).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+    const past = mine.filter((b) => !MC.isUpcoming(b)).sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+    return `<h1 tabindex="-1">My bookings</h1>
+      <section aria-labelledby="up-h"><h2 id="up-h">Upcoming (${up.length})</h2>${up.length ? `<ul class="results">${up.map(bookingCard).join("")}</ul>` : empty("No upcoming bookings", `<a href="#search">Find a provider</a>`)}</section>
+      <section aria-labelledby="past-h"><h2 id="past-h">Past, declined and cancelled (${past.length})</h2>${past.length ? `<ul class="results">${past.map(bookingCard).join("")}</ul>` : "<p>None yet.</p>"}</section>`;
+  }
+  function vNotifications() {
+    if (!S.signedInPatientId) { ui.redirect = "notifications"; return vSignIn(); }
+    const list = S.notifications.filter((n) => n.patientId === S.signedInPatientId);
+    return `<h1 tabindex="-1">Notifications</h1>
+      <div class="row"><button class="btn ghost" data-act="mark-read">Mark all as read</button><button class="btn ghost" data-act="reminders">Simulate time: show 24 hour reminders</button></div>
+      ${list.length ? `<ul class="notes">${list.map((n) => `<li class="${n.read ? "" : "unread"}"><div><p>${n.read ? "" : '<span class="dot" aria-hidden="true"></span><span class="sr">Unread. </span>'}${esc(n.text)}</p>
+        <p class="meta">${MC.formatStamp(n.createdAt)} · Simulated: no email or text was sent</p></div><a href="#booking-${n.bookingId}">View booking</a></li>`).join("")}</ul>`
+        : empty("No notifications", "Updates about your bookings will appear here.")}`;
+  }
+
+  // ---------- provider workspace ----------
+  const TABS = [["workspace", "Overview"], ["workspace-requests", "Requests"], ["workspace-bookings", "Bookings"], ["workspace-schedule", "Schedule"], ["workspace-services", "Services"], ["workspace-profile", "Profile"]];
+  function vWorkspace(r) {
+    const st = S.staff.find((x) => x.id === S.staffId && x.providerId);
+    if (!st) return `<h1 tabindex="-1">Provider workspace sign in</h1><div class="notice">${icon("info")} <span>Simulated staff sign in. No passwords are used in this prototype.</span></div>
+      <div class="cards2">${S.staff.filter((x) => x.providerId).map((x) => { const p = prov(x.providerId); return `<div class="panel"><h2>${esc(x.name)}</h2><p>${esc(x.role)}, ${esc(p.name)}</p><p class="mode mode-${p.bookingMode}">${modeText(p.bookingMode)}</p>
+        <button class="btn" data-act="staff-signin" data-id="${x.id}">Sign in as ${esc(x.name.split(" ")[0])}</button></div>`; }).join("")}</div>`;
+    const p = prov(st.providerId);
+    const mine = S.bookings.filter((b) => b.providerId === p.id);
+    const reqs = mine.filter((b) => b.status === "Requested").sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+    const tabs = `<nav class="tabs" aria-label="Workspace">${TABS.map(([h, l]) => `<a href="#${h}" ${h === r ? 'aria-current="page"' : ""}>${l}${h === "workspace-requests" && reqs.length ? ` <span class="pill">${reqs.length}</span>` : ""}</a>`).join("")}</nav>`;
+    let body = "";
+    const ptCell = (b) => `<strong>${esc(b.patientName)}</strong><br><span class="meta">Born ${MC.formatDateLong(b.dateOfBirth).replace(/^\w+, /, "")} · prefers ${b.contactPreference}</span>`;
+    if (r === "workspace") {
+      const now = new Date(), wk = now.getTime() + 7 * 864e5;
+      const upc = mine.filter((b) => b.status === "Confirmed" && MC.slotDate(b.date, b.time) > now);
+      const today = upc.filter((b) => b.date === MC.iso(now));
+      const free7 = S.slots.filter((x) => x.providerId === p.id && !x.booked && MC.slotDate(x.date, x.time) > now && MC.slotDate(x.date, x.time).getTime() < wk).length;
+      body = `<div class="kpis"><a class="kpi" href="#workspace-requests"><span class="n">${reqs.length}</span>Requests waiting</a><a class="kpi" href="#workspace-bookings"><span class="n">${upc.length}</span>Upcoming confirmed</a>
+        <div class="kpi"><span class="n">${today.length}</span>Appointments today</div><a class="kpi" href="#workspace-schedule"><span class="n">${free7}</span>Free times next 7 days</a></div>
+        <div class="cards2"><div class="panel"><h2>Listing</h2><p>${listingBadge(p.listingStatus)}</p><p>Profile completeness: <strong>${MC.completeness(p, S)}%</strong></p><p class="mode mode-${p.bookingMode}">${modeText(p.bookingMode)}</p></div>
+        <div class="panel"><h2>Next appointments</h2>${upc.length ? `<ul class="plain">${upc.sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time)).slice(0, 5).map((b) => `<li>${MC.formatDate(b.date)} ${b.time} · ${esc(svc(b.serviceId).name)} · ${esc(b.patientName)}</li>`).join("")}</ul>` : "<p>No upcoming confirmed appointments.</p>"}</div></div>`;
+    } else if (r === "workspace-requests") {
+      body = reqs.length ? `<ul class="results">${reqs.map((b) => `<li class="card"><div class="card-main"><h3>${esc(svc(b.serviceId).name)}, ${MC.formatDateLong(b.date)} at ${b.time}</h3>
+        <p>${ptCell(b)}</p>${b.note ? `<p class="quote">Note: ${esc(b.note)}</p>` : ""}<p>${badge(b.status)} <span class="meta">Ref ${b.reference} · received ${MC.formatStamp(b.createdAt)}</span></p></div>
+        <div class="col"><button class="btn" data-act="confirm" data-id="${b.id}">Confirm</button><button class="btn danger" data-act="open-decline" data-id="${b.id}">Decline</button></div></li>`).join("")}</ul>`
+        : empty("No requests waiting", p.bookingMode === "instant" ? "This clinic uses instant booking, so bookings are confirmed automatically." : "New patient requests will appear here.");
+    } else if (r === "workspace-bookings") {
+      const now = new Date();
+      const filt = ui.tabFilter;
+      const list = mine.filter((b) => b.status !== "Requested" && (filt === "all" || b.status === filt)).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+      body = `<label class="inline">Show <select id="bk-filter">${["all", "Confirmed", "Completed", "Declined", "Cancelled"].map((x) => `<option value="${x}" ${x === filt ? "selected" : ""}>${x === "all" ? "All statuses" : x}</option>`).join("")}</select></label>
+        ${list.length ? `<div class="tablewrap"><table><caption class="sr">Bookings for ${esc(p.name)}</caption><thead><tr><th scope="col">Date and time</th><th scope="col">Patient</th><th scope="col">Service</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead><tbody>
+        ${list.map((b) => { const past = MC.slotDate(b.date, b.time) < now; return `<tr><td>${MC.formatDate(b.date)} ${b.time}</td><td>${ptCell(b)}</td><td>${esc(svc(b.serviceId).name)}<br><span class="meta">${b.reference}</span></td><td>${badge(b.status)}${b.declineReason && b.status === "Declined" ? `<br><span class="meta">${esc(b.declineReason)}</span>` : ""}${b.status === "Cancelled" ? `<br><span class="meta">By ${b.cancelledBy}${b.cancelReason ? ": " + esc(b.cancelReason) : ""}</span>` : ""}</td>
+          <td>${b.status === "Confirmed" && !past ? `<button class="btn small danger" data-act="open-pcancel" data-id="${b.id}">Cancel</button>` : b.status === "Confirmed" && past ? `<button class="btn small" data-act="complete" data-id="${b.id}">Mark as completed</button>` : ""}</td></tr>`; }).join("")}</tbody></table></div>` : empty("No bookings", "Nothing matches this filter.")}`;
+    } else if (r === "workspace-schedule") {
+      const now = new Date();
+      const sl = S.slots.filter((x) => x.providerId === p.id && MC.slotDate(x.date, x.time) > now).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+      const days = {}; for (const s of sl) (days[s.date] = days[s.date] || []).push(s);
+      const tmr = new Date(); tmr.setDate(tmr.getDate() + 1);
+      body = `<form id="slot-form" class="panel row wrap-row"><h2 class="h3 full">Add a time</h2><label>Date<input type="date" name="date" min="${MC.iso(tmr)}" value="${MC.iso(tmr)}" required></label>
+        <label>Time<select name="time">${["08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "18:00", "19:00"].map((t) => `<option>${t}</option>`).join("")}</select></label><button class="btn">Add time</button></form>
+        <p class="meta">Booked times are protected. To free one, cancel the booking first.</p>
+        ${Object.keys(days).slice(0, 12).map((d) => `<div class="day"><h3>${MC.formatDateLong(d)}</h3><ul class="slots">${days[d].map((s) => `<li class="${s.booked ? "booked" : ""}"><span>${s.time}</span> ${s.booked ? '<span class="meta">Booked</span>' : `<button class="linkbtn" data-act="remove-slot" data-id="${s.id}" aria-label="Remove ${s.time} on ${MC.formatDate(d)}">Remove</button>`}</li>`).join("")}</ul></div>`).join("")}`;
+    } else if (r === "workspace-services") {
+      const list = S.services.filter((x) => x.providerId === p.id);
+      const form = (s) => `<form class="svc-form panel" data-id="${s ? s.id : ""}"><h3>${s ? "Edit service" : "Add a service"}</h3>
+        <label>Name<input name="name" required value="${esc(s ? s.name : "")}"></label><label>Category<input name="category" value="${esc(s ? s.category : "")}"></label>
+        <label>Length in minutes<input name="duration" type="number" min="5" max="120" value="${s ? s.durationMinutes : 15}"></label>
+        <label>Description<textarea name="description" rows="2">${esc(s ? s.description : "")}</textarea></label>
+        <label>Who it is for<input name="eligibility" value="${esc(s ? s.eligibilityNote : "")}"></label>
+        <div class="row"><button class="btn">${s ? "Save changes" : "Add service"}</button>${s ? '<button type="button" class="btn ghost" data-act="cancel-edit">Cancel</button>' : ""}</div></form>`;
+      body = `<ul class="results">${list.map((s) => ui.editService === s.id ? `<li>${form(s)}</li>` : `<li class="card ${s.archived ? "muted" : ""}"><div class="card-main"><h3>${esc(s.name)} ${s.archived ? '<span class="pill grey">Archived</span>' : ""}</h3><p class="meta">${esc(s.category)} · ${s.durationMinutes} minutes</p><p>${esc(s.description)}</p></div>
+        <div class="col"><button class="btn ghost small" data-act="edit-service" data-id="${s.id}">Edit</button><button class="btn ghost small" data-act="archive-service" data-id="${s.id}">${s.archived ? "Restore" : "Archive"}</button></div></li>`).join("")}</ul>${form(null)}`;
+    } else if (r === "workspace-profile") {
+      const inp = (n, l, v, ta) => `<label>${l}${ta ? `<textarea name="${n}" rows="3">${esc(v)}</textarea>` : `<input name="${n}" value="${esc(v)}">`}</label>`;
+      body = `<form id="profile-form" class="panel"><p>Profile completeness: <strong>${MC.completeness(p, S)}%</strong></p>
+        ${inp("description", "About the service", p.description, 1)}${inp("phone", "Phone", p.phone)}${inp("email", "Email", p.email)}${inp("address", "Address", p.address)}
+        ${inp("openingHours", "Opening hours", p.openingHours)}${inp("bookingInstructions", "Booking instructions for patients", p.bookingInstructions, 1)}
+        <label>Booking type<select name="bookingMode"><option value="request" ${p.bookingMode === "request" ? "selected" : ""}>Request booking (staff confirm)</option><option value="instant" ${p.bookingMode === "instant" ? "selected" : ""}>Instant booking</option></select></label>
+        <p class="meta">Cancellation rule: ${esc(p.cancellationRule)} This is fixed for the pilot.</p><button class="btn">Save profile</button></form>`;
+    }
+    return `<h1 tabindex="-1">${esc(p.name)}</h1><p class="meta">Provider workspace · ${esc(p.type)} · ${esc(p.borough)}</p>${tabs}<div class="tabbody">${body}</div>`;
+  }
+
+  // ---------- admin ----------
+  const ATABS = [["admin", "Listings"], ["admin-metrics", "Metrics"], ["admin-notice", "Site notice"]];
+  function bar(label, value, max, suffix = "") {
+    const w = max ? Math.round((value / max) * 100) : 0;
+    return `<div class="bar"><span class="bar-l">${esc(label)}</span><span class="bar-t"><span class="bar-f" style="width:${w}%"></span></span><span class="bar-v">${value}${suffix}</span></div>`;
+  }
+  function vAdmin(r) {
+    const tabs = `<nav class="tabs" aria-label="Admin">${ATABS.map(([h, l]) => `<a href="#${h}" ${h === r ? 'aria-current="page"' : ""}>${l}</a>`).join("")}</nav>`;
+    let body = "";
+    if (r === "admin") {
+      const f = ui.tabFilter === "all" || !["Approved", "Pending review", "Hidden"].includes(ui.tabFilter) ? "all" : ui.tabFilter;
+      const list = S.providers.filter((p) => f === "all" || p.listingStatus === f).sort((a, b) => (a.listingStatus === "Pending review" ? -1 : 0) - (b.listingStatus === "Pending review" ? -1 : 0));
+      body = `<label class="inline">Show <select id="lst-filter">${["all", "Pending review", "Approved", "Hidden"].map((x) => `<option value="${x}" ${x === f ? "selected" : ""}>${x === "all" ? "All listings" : x}</option>`).join("")}</select></label>
+        <div class="tablewrap"><table><caption class="sr">Provider listings</caption><thead><tr><th scope="col">Provider</th><th scope="col">Borough</th><th scope="col">Booking</th><th scope="col">Completeness</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead><tbody>
+        ${list.map((p) => `<tr><td><strong>${esc(p.name)}</strong><br><span class="meta">${esc(p.type)} · ${S.services.filter((s) => s.providerId === p.id && !s.archived).length} services</span></td><td>${esc(p.borough)}</td><td>${p.bookingMode === "instant" ? "Instant" : "Request"}</td>
+          <td>${MC.completeness(p, S)}%</td><td>${listingBadge(p.listingStatus)}</td><td class="actions">
+          ${p.listingStatus !== "Approved" ? `<button class="btn small" data-act="listing" data-id="${p.id}" data-v="Approved">${p.listingStatus === "Hidden" ? "Restore" : "Approve"}</button>` : ""}
+          ${p.listingStatus !== "Hidden" ? `<button class="btn small ghost" data-act="listing" data-id="${p.id}" data-v="Hidden">Hide</button>` : ""}</td></tr>`).join("")}</tbody></table></div>
+        <p class="meta">Approved listings appear in patient search straight away. Hidden and pending listings do not.</p>`;
+    } else if (r === "admin-metrics") {
+      const m = MC.metrics(S);
+      const byStatus = Object.keys(MC.STATUSES).map((k) => [k, S.bookings.filter((b) => b.status === k).length]);
+      const maxS = Math.max(...byStatus.map((x) => x[1]), 1);
+      const dec = Object.entries(m.declines); const maxD = Math.max(...dec.map((x) => x[1]), 1);
+      body = `<p class="meta">Calculated live from the synthetic data in this browser.</p>
+        <div class="kpis"><div class="kpi"><span class="n">${m.activeProviders}</span>Active providers of ${m.totalProviders}</div><div class="kpi"><span class="n">${m.completeness}%</span>Average listing completeness</div>
+        <div class="kpi"><span class="n">${m.requests}</span>Requests received (${m.awaiting} waiting)</div><div class="kpi"><span class="n">${m.confirmationRate}%</span>Request confirmation rate</div>
+        <div class="kpi"><span class="n">${m.avgDecisionHours} h</span>Average time to decision</div><div class="kpi"><span class="n">${m.cancellationRate}%</span>Cancellation rate</div></div>
+        <div class="cards2"><div class="panel"><h2>Bookings by status</h2>${byStatus.map(([k, v]) => bar(k, v, maxS)).join("")}</div>
+        <div class="panel"><h2>Declines by reason</h2>${dec.length ? dec.map(([k, v]) => bar(k, v, maxD)).join("") : "<p>No declines yet.</p>"}</div></div>`;
+    } else {
+      body = `<form id="notice-form" class="panel"><label for="notice">Notice shown at the top of the patient home page</label><textarea id="notice" name="notice" rows="3" maxlength="240">${esc(S.siteNotice)}</textarea>
+        <div class="row"><button class="btn">Save notice</button><button type="button" class="btn ghost" data-act="clear-notice">Remove notice</button></div></form>
+        ${S.siteNotice ? `<h2 class="h3">Preview</h2><div class="notice">${icon("info")} <span>${esc(S.siteNotice)}</span></div>` : ""}`;
+    }
+    return `<h1 tabindex="-1">Platform admin</h1><div class="notice">${icon("info")} <span>Simulated admin access for Sam Taylor. No passwords are used.</span></div>${tabs}<div class="tabbody">${body}</div>`;
+  }
+
+  // ---------- modal ----------
+  function modalHtml() {
+    const m = ui.modal; if (!m) return "";
+    const b = S.bookings.find((x) => x.id === m.id);
+    let title = "", inner = "";
+    if (m.type === "cancel") {
+      title = "Cancel this booking?";
+      inner = `<p>${esc(svc(b.serviceId).name)} on ${MC.formatDateLong(b.date)} at ${b.time}. The time will be released for other patients.</p>
+        <label for="m-reason">Reason (optional)</label><select id="m-reason" name="reason"><option value="">Prefer not to say</option><option>No longer needed</option><option>The time no longer suits me</option><option>Booked somewhere else</option></select>`;
+    } else {
+      title = m.type === "decline" ? "Decline this request" : "Cancel this appointment";
+      inner = `<p>${esc(b.patientName)}, ${esc(svc(b.serviceId).name)}, ${MC.formatDateLong(b.date)} at ${b.time}. The patient will see your reason.</p>
+        ${m.error ? `<p class="err" role="alert" id="m-err">${icon("alert")} ${m.error}</p>` : ""}
+        <label for="m-reason">Reason (required)</label><select id="m-reason" name="reason" ${m.error ? 'aria-invalid="true" aria-describedby="m-err"' : ""}><option value="">Choose a reason</option>
+        ${(m.type === "decline" ? MC.DECLINE_REASONS : ["Clinician unavailable", "Clinic closed", "Booked in error", "Other"]).map((x) => `<option>${x}</option>`).join("")}</select>`;
+    }
+    return `<div class="overlay"><form class="modal" id="modal-form" role="dialog" aria-modal="true" aria-labelledby="m-title"><h2 id="m-title">${title}</h2>${inner}
+      <div class="row"><button class="btn danger">${m.type === "decline" ? "Decline request" : "Cancel booking"}</button><button type="button" class="btn ghost" data-act="close-modal">Keep booking</button></div></form></div>`;
+  }
+
+  // ---------- render ----------
+  function route() { return decodeURIComponent(location.hash.slice(1)); }
+  let lastRoute = null;
+  function render() {
+    const r = route();
+    if (r !== lastRoute) { ui.errors = {}; ui.form = {}; ui.signInError = ""; ui.slotId = null; if (lastRoute !== null && area(r) !== area(lastRoute)) ui.tabFilter = "all"; ui.editService = null; }
+    const changed = r !== lastRoute; lastRoute = r;
+    let html;
+    if (r === "" || r === "start") html = vStart();
+    else if (r === "about") html = vAbout();
+    else if (r === "patient") html = vPatientHome();
+    else if (r === "search") html = vSearch();
+    else if (r.startsWith("provider-")) html = vProvider(r.slice(9));
+    else if (r.startsWith("book-")) html = vBook(r.slice(5));
+    else if (r.startsWith("booking-")) html = vBooking(r.slice(8));
+    else if (r.startsWith("reschedule-")) html = vReschedule(r.slice(11));
+    else if (r === "sign-in") html = vSignIn();
+    else if (r === "my-bookings") html = vMyBookings();
+    else if (r === "notifications") html = vNotifications();
+    else if (r.startsWith("workspace")) html = vWorkspace(r);
+    else if (r.startsWith("admin")) html = vAdmin(r);
+    else html = `<h1 tabindex="-1">Page not found</h1><p><a href="#start">Go to the start</a></p>`;
+    header(r);
+    $("#main").innerHTML = (ui.toast ? `<div class="toast" role="status">${icon("check")} <span>${esc(ui.toast)}</span><button class="linkbtn" data-act="dismiss-toast" aria-label="Dismiss message">Dismiss</button></div>` : "") + html;
+    $("#modal-root").innerHTML = modalHtml();
+    if (ui.modal) { const f = $("#m-reason"); if (f) f.focus(); }
+    else if (changed || ui.focusH1) { const h = $("#main h1"); if (h) h.focus({ preventScroll: false }); window.scrollTo(0, 0); ui.focusH1 = false; }
+    ui.toast = "";
+    document.title = (($("#main h1") || {}).textContent || "MediConnect") + " | MediConnect prototype";
+  }
+
+  // ---------- events ----------
+  document.addEventListener("click", (e) => {
+    const t = e.target.closest("[data-act]"); if (!t) return;
+    const act = t.dataset.act, id = t.dataset.id;
+    const commit = (fn, msg, nextHash) => {
+      try { S = fn(S); save(); if (msg) toast(msg); ui.modal = null; if (nextHash) go(nextHash); else render(); }
+      catch (err) { toast(err.message); render(); }
+    };
+    if (act === "pick-slot") { ui.slotId = id; const fd = $("#book-form"); if (fd) ui.form = formSnapshot(fd); render(); const h = $("#details-h") || $("[data-act=do-reschedule]"); if (h) h.focus(); announce("Time selected"); }
+    else if (act === "focus-field") { e.preventDefault(); const el = document.getElementById(id); if (el) el.focus(); }
+    else if (act === "patient-signout") { S.signedInPatientId = null; save(); toast("You have signed out"); go("patient"); }
+    else if (act === "staff-signin") { S.staffId = id; save(); go("workspace"); }
+    else if (act === "staff-signout") { S.staffId = null; save(); go("workspace"); }
+    else if (act === "clear-filters") { ui.filters = { q: "", borough: "", type: "", mode: "", evening: false, online: false }; render(); }
+    else if (act === "open-cancel") { ui.modal = { type: "cancel", id }; render(); }
+    else if (act === "open-decline") { ui.modal = { type: "decline", id }; render(); }
+    else if (act === "open-pcancel") { ui.modal = { type: "pcancel", id }; render(); }
+    else if (act === "close-modal") { ui.modal = null; render(); }
+    else if (act === "confirm") commit((s) => MC.confirmBooking(s, id), "Request confirmed. The patient has been notified (simulated).");
+    else if (act === "complete") commit((s) => MC.completeBooking(s, id), "Marked as completed");
+    else if (act === "do-reschedule") { const slot = ui.slotId; commit((s) => MC.rescheduleBooking(s, id, slot), "Your booking has been moved to the new time", "booking-" + id); ui.slotId = null; }
+    else if (act === "mark-read") { S.notifications = S.notifications.map((n) => (n.patientId === S.signedInPatientId ? Object.assign({}, n, { read: true }) : n)); save(); toast("All notifications marked as read"); render(); }
+    else if (act === "reminders") { const r = MC.simulateReminders(S); S = r.state; save(); toast(r.count ? `${r.count} reminder${r.count > 1 ? "s" : ""} created (simulated)` : "No confirmed bookings in the next 48 hours need a reminder"); render(); }
+    else if (act === "remove-slot") commit((s) => MC.removeSlot(s, id), "Time removed");
+    else if (act === "edit-service") { ui.editService = id; render(); }
+    else if (act === "cancel-edit") { ui.editService = null; render(); }
+    else if (act === "archive-service") { const sv = svc(id); commit((s) => Object.assign({}, s, { services: s.services.map((x) => (x.id === id ? Object.assign({}, x, { archived: !x.archived }) : x)) }), sv.archived ? "Service restored" : "Service archived and hidden from patients"); }
+    else if (act === "listing") { const v = t.dataset.v; commit((s) => MC.setListing(s, id, v), `${prov(id).name} is now ${v === "Approved" ? "approved and visible in search" : "hidden from search"}`); }
+    else if (act === "clear-notice") { S.siteNotice = ""; save(); toast("Site notice removed"); render(); }
+    else if (act === "reset") { S = MC.createSeed(); save(); ui.filters.q = ""; toast("Demo data has been reset"); go("start"); }
+    else if (act === "dismiss-toast") { t.closest(".toast").remove(); }
+  });
+  function formSnapshot(form) { const fd = new FormData(form); const dob = readDob(fd, "dob"); return { name: fd.get("name") || "", contact: fd.get("contact") || "", note: fd.get("note") || "", dob: dob || "" }; }
+
+  document.addEventListener("change", (e) => {
+    if (e.target.id === "role-switch") { const v = e.target.value; go(v === "patient" ? "patient" : v === "provider" ? "workspace" : v === "admin" ? "admin" : "start"); }
+    else if (e.target.closest("#search-form")) { readFilters(e.target.form); $("#results").innerHTML = resultsHtml(); }
+    else if (e.target.id === "bk-filter" || e.target.id === "lst-filter") { ui.tabFilter = e.target.value; render(); const el = document.getElementById(e.target.id); if (el) el.focus(); }
+  });
+  document.addEventListener("input", (e) => { if (e.target.id === "f-note") $("#note-count").textContent = e.target.value.length; });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && ui.modal) { ui.modal = null; render(); }
+    if (e.key === "Tab" && ui.modal) {
+      const els = [...document.querySelectorAll("#modal-form select, #modal-form button")];
+      if (!els.length) return;
+      if (e.shiftKey && document.activeElement === els[0]) { e.preventDefault(); els[els.length - 1].focus(); }
+      else if (!e.shiftKey && document.activeElement === els[els.length - 1]) { e.preventDefault(); els[0].focus(); }
+    }
+  });
+  function readFilters(form) {
+    const fd = new FormData(form);
+    ui.filters = { q: fd.get("q") || "", borough: fd.get("borough") || "", type: fd.get("type") || "", mode: fd.get("mode") || "", evening: !!fd.get("evening"), online: !!fd.get("online") };
+  }
+  document.addEventListener("submit", (e) => {
+    const f = e.target; e.preventDefault();
+    const fd = new FormData(f);
+    if (f.id === "home-search") { ui.filters = Object.assign({}, ui.filters, { q: fd.get("q") || "", borough: fd.get("borough") || "" }); go("search"); }
+    else if (f.id === "search-form") { readFilters(f); $("#results").innerHTML = resultsHtml(); announce(MC.search(S, ui.filters).length + " providers found"); }
+    else if (f.id === "book-form") {
+      const sid = route().slice(5); const s = svc(sid);
+      const snap = formSnapshot(f); ui.form = snap; const errors = {};
+      if (!snap.name.trim()) errors.name = "Enter your full name";
+      if (!snap.dob) errors.dob = "Enter a real date of birth in the past";
+      if (!snap.contact) errors.contact = "Choose how the provider should contact you";
+      if (snap.note.length > 200) errors.note = "Note must be 200 characters or fewer";
+      ui.errors = errors;
+      if (Object.keys(errors).length) { render(); const es = $("#err-sum"); if (es) es.focus(); return; }
+      const pid = S.signedInPatientId || "guest-" + Date.now().toString(36);
+      try {
+        const r = MC.createBooking(S, { slotId: ui.slotId, serviceId: s.id, patientId: pid, patientName: snap.name.trim(), dateOfBirth: snap.dob, contactPreference: snap.contact, note: snap.note });
+        S = r.state; S.signedInPatientId = pid; save(); ui.slotId = null; ui.justBooked = true;
+        announce(r.booking.status === "Confirmed" ? "Appointment booked. Reference " + r.booking.reference : "Request sent. Reference " + r.booking.reference);
+        go("booking-" + r.booking.id);
+      } catch (err) { toast(err.message); ui.slotId = null; render(); }
+    }
+    else if (f.id === "signin-test") { S.signedInPatientId = fd.get("pid"); save(); const n = ui.redirect || "my-bookings"; ui.redirect = null; toast("Signed in as " + patientName() + " (simulated)"); go(n); }
+    else if (f.id === "signin-ref") {
+      const dob = readDob(fd, "rdob"); const b = dob && MC.findByReference(S, fd.get("ref") || "", dob);
+      if (!b) { ui.signInError = "We couldn't find a booking with that reference and date of birth. Check both and try again."; render(); const er = $("#f-ref"); if (er) er.focus(); return; }
+      S.signedInPatientId = b.patientId; save(); toast("Signed in (simulated)"); go("booking-" + b.id);
+    }
+    else if (f.id === "modal-form") {
+      const m = ui.modal; const reason = fd.get("reason") || "";
+      try {
+        if (m.type === "cancel") { S = MC.cancelBooking(S, m.id, "patient", reason); toast("Your booking has been cancelled and the time released"); }
+        else {
+          if (!reason) { ui.modal.error = "Choose a reason so the patient knows why"; render(); return; }
+          S = m.type === "decline" ? MC.declineBooking(S, m.id, reason) : MC.cancelBooking(S, m.id, "provider", reason);
+          toast(m.type === "decline" ? "Request declined. The patient has been notified (simulated)." : "Appointment cancelled. The patient has been notified (simulated).");
+        }
+        save(); ui.modal = null; ui.focusH1 = true; render();
+      } catch (err) { ui.modal = null; toast(err.message); render(); }
+    }
+    else if (f.id === "slot-form") { const pid = S.staff.find((x) => x.id === S.staffId).providerId; try { S = MC.addSlot(S, pid, fd.get("date"), fd.get("time")); save(); toast(`Time added: ${MC.formatDate(fd.get("date"))} at ${fd.get("time")}`); } catch (err) { toast(err.message); } render(); }
+    else if (f.classList.contains("svc-form")) {
+      const pid = S.staff.find((x) => x.id === S.staffId).providerId; const p = prov(pid);
+      const name = (fd.get("name") || "").trim(); if (!name) { toast("Enter a service name"); render(); return; }
+      const data = { name, category: fd.get("category") || "General", durationMinutes: +fd.get("duration") || 15, description: fd.get("description") || "", eligibilityNote: fd.get("eligibility") || "" };
+      if (f.dataset.id) S.services = S.services.map((x) => (x.id === f.dataset.id ? Object.assign({}, x, data) : x));
+      else { const n = S.services.filter((x) => x.providerId === pid).length + 1; S.services = S.services.concat([Object.assign({ id: `${pid}-s${n}-${Date.now().toString(36)}`, providerId: pid, bookingMode: p.bookingMode, archived: false }, data)]); }
+      ui.editService = null; save(); toast(f.dataset.id ? "Service updated" : "Service added and visible to patients"); render();
+    }
+    else if (f.id === "profile-form") {
+      const pid = S.staff.find((x) => x.id === S.staffId).providerId;
+      const data = {}; for (const k of ["description", "phone", "email", "address", "openingHours", "bookingInstructions", "bookingMode"]) data[k] = (fd.get(k) || "").trim();
+      S.providers = S.providers.map((p) => (p.id === pid ? Object.assign({}, p, data) : p));
+      S.services = S.services.map((x) => (x.providerId === pid ? Object.assign({}, x, { bookingMode: data.bookingMode }) : x));
+      save(); toast("Profile saved"); render();
+    }
+    else if (f.id === "notice-form") { S.siteNotice = (fd.get("notice") || "").trim(); save(); toast(S.siteNotice ? "Site notice saved. It now shows on the patient home page." : "Site notice removed"); render(); }
+  });
+  window.addEventListener("hashchange", render);
+  render();
+})();
+
+</script>
+</body>
+</html>
